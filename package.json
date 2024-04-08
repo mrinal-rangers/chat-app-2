@@ -19,7 +19,6 @@
   "homepage": "https://github.com/mrinal-rangers/chat-app-2#readme",
   "dependencies": {
     "dotenv": "^16.4.5",
-    "env": "^0.0.2",
     "express": "^4.19.2",
     "nodemon": "^3.1.0"
   }

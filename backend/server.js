@@ -3,7 +3,7 @@ const {chats} = require('./data/data');
 const dotenv = require('dotenv');
 const app = express();
 dotenv.config();
-const port= process.env.port||3000;
+const port= process.env.PORT|| 9000;
 
 app.get('/',(req,res)=>{
     return res.send('API is running');
