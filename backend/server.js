@@ -16,6 +16,7 @@ app.get('/',(req,res)=>{
     return res.send('API is running');
 })
 app.use('/api/user',userRoutes);
+app.use('/api/chat',chatroutes);
 
 
 
