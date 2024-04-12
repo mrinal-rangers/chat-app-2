@@ -4,15 +4,15 @@ import { useHistory } from 'react-router-dom'; // Only needed if you're using th
 const ChatContext = createContext();
 
 const ChatProvider = ({ children }) => {
-  const history = useHistory(); // Only needed if you're using the history object
+  const history = useHistory(); 
 
-  const [user, setUser] = useState(); // Add type annotation for user state
+  const [user, setUser] = useState(); 
 
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo")); // Corrected spelling
+    const userInfo = JSON.parse(localStorage.getItem("userInfo")); 
     setUser(userInfo);
-    if (!userInfo) history.push("/"); // Only needed if you're using the history object
-  }, [history]); // Only needed if you're using the history object
+    if (!userInfo) history.push("/"); 
+  }, [history]); 
 
   return (
     <ChatContext.Provider value={{ user, setUser }}>
