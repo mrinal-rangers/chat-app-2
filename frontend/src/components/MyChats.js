@@ -9,8 +9,9 @@ import { Button,Stack,Text } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import ChatLoading from './ChatLoading';
 import { getSender } from 'src/config/ChatLogics';
+import GroupChatModal from './miscellaneous/GroupChatModal';
 
-const MyChats = () => {
+const MyChats = ({fetchAgain}) => {
   const { user, setUser ,selectedChat, setSelectedChat,chats,setChats } = ChatState();
   const [loggedUser,setLoggedUser] = useState();
   const toast = useToast();
@@ -39,7 +40,7 @@ const MyChats = () => {
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
-  }, []);
+  }, [fetchAgain]);
 
   return (
     <Box
@@ -63,6 +64,7 @@ const MyChats = () => {
         alignItems="center"
       >
         My Chats
+        <GroupChatModal>
           <Button
             display="flex"
             fontSize={{ base: "17px", md: "10px", lg: "17px" }}
@@ -70,6 +72,7 @@ const MyChats = () => {
           >
             New Group Chat
           </Button>
+        </GroupChatModal>
       </Box>
 
       <Box
