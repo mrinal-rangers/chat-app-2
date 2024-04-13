@@ -153,13 +153,15 @@ const GroupChatModal = ({children}) => {
             </FormControl>
 
             <Box w="100%" d="flex" flexWrap="wrap">
-              {selectedUsers.map((u) => (
-                <UserBadgeItem
-                  key={u._id}
-                  user={u}
-                  handleFunction={() => handleDelete(u)}
-                />
-              ))}
+            {selectedUsers && selectedUsers.length > 0 && (
+                selectedUsers.map((u) => (
+                  <UserBadgeItem
+                    key={u._id}
+                    user={u}
+                    handleFunction={() => handleDelete(u)}
+                  />
+                ))
+              )}
             </Box>
 
             {loading ? (

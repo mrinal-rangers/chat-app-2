@@ -143,18 +143,12 @@ const addToGroup = asyncHandler(async (req, res) => {
   });
 
 
-const removeFromGroup = asyncHandler(async (req, res) => {
+  const removeFromGroup = asyncHandler(async (req, res) => {
     const { chatId, userId } = req.body;
   
     // check if the requester is admin
   
-    const removed = await Chat.findByIdAndUpdate(chatId,{
-        $pull: { users: userId },
-      },
-      {
-        new: true,
-      }
-    )
+    const removed = await Chat.findByIdAndUpdate(chatId,{$pull: { users: userId }, },{new: true,})
       .populate("users", "-password")
       .populate("groupAdmin", "-password");
   
