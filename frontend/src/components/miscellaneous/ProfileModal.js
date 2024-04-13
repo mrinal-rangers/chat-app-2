@@ -13,13 +13,14 @@ import {
     IconButton,
     Text,
     Image,
+    Box,
   } from "@chakra-ui/react";
   
 
 
 const ProfileModal = ({user,children}) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
-    return <>
+    return <Box >
     {children ? (
         <span onClick={onOpen}>{children}</span>
       ) : (
@@ -28,7 +29,7 @@ const ProfileModal = ({user,children}) => {
 
     <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent w={{base:'80vw'}}>
           <ModalHeader
             fontSize="40px"
             fontFamily="Work sans"
@@ -66,7 +67,7 @@ const ProfileModal = ({user,children}) => {
 
 
 
-    </>
+    </Box>
 }
 
 export default ProfileModal;
