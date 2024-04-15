@@ -1,15 +1,94 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ChatState } from 'src/context/ChatProvider'
-import {Box,Text} from '@chakra-ui/react'
+import {Box,FormControl,Input,Spinner,Text, useToast} from '@chakra-ui/react'
 import {IconButton} from '@chakra-ui/react'
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { getSender, getSenderFull } from '../config/ChatLogics';
 import ProfileModal from './miscellaneous/ProfileModal';
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal';
+import { useState } from 'react';
+import axios from 'axios';
 
 const SingleChat = ({fetchAgain,setFetchAgain}) => {
     
   const {user,selectedChat,setSelectedChat} = ChatState();
+  const [messages,setMessages] = useState([]);
+  const [loading,setLoading] = useState(false);
+  const [newMessage,setNewMessage] = useState('');
+  const toast= useToast();
+
+  
+
+  const fetchMessage = async () => {
+    if (!selectedChat) return;
+  
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+  
+      setLoading(true);
+      const { data } = await axios.get(`/api/message/${selectedChat._id}`, config);
+      setMessages(data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      toast({
+        title: "Error Occurred!",
+        description: "Failed to Load the Messages",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    }
+  };
+  
+  useEffect(() => {
+    fetchMessage();
+  }, [selectedChat]);
+
+  useEffect(() => {
+    console.log(messages); 
+  }, [messages]);
+
+  const sendMessage = async(event)=>{
+    if(event.key === 'Enter' && newMessage){
+      try{  
+        setLoading(true);
+        const config = {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+        setNewMessage('');
+        const {data} = await axios.post('/api/message',{
+          content:newMessage ,
+          chatId:selectedChat._id
+        },config);
+        setMessages([...messages,data]);
+        fetchMessage();
+        setLoading(false);
+
+      }catch(error){
+        setLoading(false);
+        toast({
+          title: "Error Occured!",
+          description: "Failed to send the Message",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+      }
+    }
+  }
+
+  const typingHandler = (e)=>{
+    setNewMessage(e.target.value);
+  }
 
   return (
     <div>
@@ -55,7 +134,27 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
             borderRadius="lg"
             overflowY="hidden"
           >
-            {/* Messages here */}
+            {
+              loading ?(<Spinner
+                size="xl"
+                w={20}
+                h={20}
+                alignSelf="center"
+                margin="auto"
+              />) :(<div>
+              {/* {messages} */}
+              </div>)
+            }
+            <FormControl onKeyDown={sendMessage} isRequired mt={3} >
+              <Input
+                variant="filled"
+                bg="#E0E0E0"
+                placeholder="Enter a message.."
+                value={newMessage}
+                onChange={typingHandler}
+              />
+            </FormControl>
+
           </Box>
         
         </>):(
