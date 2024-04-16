@@ -14,7 +14,6 @@ import {
   useToast,
   Box,
   IconButton,
-  Spinner,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
@@ -188,6 +187,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
       setFetchAgain(!fetchAgain);
       fetchMessages();
       setLoading(false);
+      fetchMessages();
     } catch (error) {
       toast({
         title: "Error Occured!",

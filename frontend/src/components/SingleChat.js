@@ -8,6 +8,8 @@ import ProfileModal from './miscellaneous/ProfileModal';
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal';
 import { useState } from 'react';
 import axios from 'axios';
+import './styles.css'
+import ScrollableChat from './ScrollableChat';
 
 const SingleChat = ({fetchAgain,setFetchAgain}) => {
     
@@ -19,7 +21,7 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
 
   
 
-  const fetchMessage = async () => {
+  const fetchMessages = async () => {
     if (!selectedChat) return;
   
     try {
@@ -47,7 +49,7 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
   };
   
   useEffect(() => {
-    fetchMessage();
+    fetchMessages();
   }, [selectedChat]);
 
   useEffect(() => {
@@ -69,7 +71,7 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
           chatId:selectedChat._id
         },config);
         setMessages([...messages,data]);
-        fetchMessage();
+        fetchMessages();
         setLoading(false);
 
       }catch(error){
@@ -118,7 +120,7 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
                 </Box>
             </>) :(<>
                 <Box mr={2} ml={2}>{selectedChat.chatName.toUpperCase()}</Box>
-                <UpdateGroupChatModal fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+                <UpdateGroupChatModal fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} fetchMessages={fetchMessages} />
             </>)
             }
           </Text>
@@ -141,8 +143,9 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
                 h={20}
                 alignSelf="center"
                 margin="auto"
-              />) :(<div>
-              {/* {messages} */}
+              />) :(
+              <div className='messages'>
+              <ScrollableChat messages={messages}/>
               </div>)
             }
             <FormControl onKeyDown={sendMessage} isRequired mt={3} >
