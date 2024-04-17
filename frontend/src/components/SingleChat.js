@@ -11,15 +11,28 @@ import axios from 'axios';
 import './styles.css'
 import ScrollableChat from './ScrollableChat';
 import io from 'socket.io-client'
+import Lottie from 'react-lottie';
+import animationData from "../animations/typing.json";
 
 const SingleChat = ({fetchAgain,setFetchAgain}) => {
     
-  const {user,selectedChat,setSelectedChat} = ChatState();
+  const {user,selectedChat,setSelectedChat, notification,setNotification } = ChatState();
   const [messages,setMessages] = useState([]);
   const [loading,setLoading] = useState(false);
   const [newMessage,setNewMessage] = useState('');
   const [socketConnected,setSocketConnected] =useState(false);
+  const [typing,setTyping] = useState(false);
+  const [isTyping,setIsTyping] = useState(false);
   const toast= useToast();
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
 
   var ENDPOINT = 'http://localhost:7001';
   const [socket,setSocket]= useState(null);
@@ -32,7 +45,8 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
     newSocket.on('connection', () => {
       setSocketConnected(true);
     });
-
+    newSocket.on('typing',()=>setIsTyping(true))
+    newSocket.on('stop typing',()=>setIsTyping(false))
     return () => {
       newSocket.disconnect();
     };
@@ -42,14 +56,18 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
     if (socket) {
       socket.on('message recieved', (newMessageRecieved) => {
         if (!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat._id) {
-          // give notification
+          if(!notification.includes(newMessageRecieved)){
+            setNotification([newMessageRecieved,...notification]);
+            setFetchAgain(!fetchAgain);
+          }
+
         } 
         setMessages([...messages, newMessageRecieved]);
         
       });
     }
   },);
-
+  
   const fetchMessages = async () => {
     if (!selectedChat) return;
 
@@ -122,6 +140,21 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
 
   const typingHandler = (e)=>{
     setNewMessage(e.target.value);
+    if(!socketConnected)return;
+    if(!typing){
+      setTyping(true);
+      socket.emit('typing',selectedChat._id);
+    }
+    let lastTypingTime = new Date().getTime();
+    var timerLength = 3000;
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", selectedChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
   }
 
   return (
@@ -188,6 +221,7 @@ const SingleChat = ({fetchAgain,setFetchAgain}) => {
                 value={newMessage}
                 onChange={typingHandler}
               />
+              
             </FormControl>
 
           </Box>
