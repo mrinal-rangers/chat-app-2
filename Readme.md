@@ -1,7 +1,7 @@
 # Real time chat App
 ![alt text](demo.png)
 
-Tech Stack : React , MongoDB , Node.js , Express.js, Socket.IO
+Tech Stack : React , MongoDB , Node.js , Express.js, Socket.IO, CHAKRA UI
 
 # Features :
 - Responsive
@@ -13,7 +13,7 @@ Tech Stack : React , MongoDB , Node.js , Express.js, Socket.IO
 - Notification Alert for new messages
 - Searching New Users
 - Messages are stored on cloud 
-- Set DP (Display Picture) enabled via [Imageinary](https://cloudinary.com/)
+- Set DP (Display Picture) enabled via [CLOUDINARY](https://cloudinary.com/)
 
 
 # SETUP
