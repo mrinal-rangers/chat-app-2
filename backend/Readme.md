@@ -1,3 +1,3 @@
 # TESTING OF VARIOUS API ENDPOINTS IN POSTMAN
 
-![POSTMAN]( postman.png)
+![POSTMAN](postman.png)
