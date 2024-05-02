@@ -38,42 +38,46 @@ npm start
 
 ## CLASS DIAGRAM
 
-+-----------------------------------+
-|               User                |
-+-----------------------------------+
-| - _id: String                     |
-| - name: String                    |
-| - email: String                   |
-| - password(hashed): String        |
-| - picture: Image                  |
-+-----------------------------------+
-| + User(_id, name, email, password,|
-|   picture)                        |
-+-----------------------------------+
+| Class    | Attribute          | Type                |
+|----------|--------------------|---------------------|
+| User     | _id                | String              |
+|          | name               | String              |
+|          | email              | String              |
+|          | password(hashed)   | String              |
+|          | picture            | Image               |
+|----------|--------------------|---------------------|
+| Chat     | _id                | String              |
+|          | chatName           | String              |
+|          | isGroupChat        | Boolean             |
+|          | admin              | User._id            |
+|          | users              | Array<User>         |
+|          | latestMessage      | Message             |
+|----------|--------------------|---------------------|
+| Message  | _id                | String              |
+|          | sender             | User                |
+|          | Chat               | Chat._id            |
+|          | content            | String              |
 
-+-----------------------------------+
-|               Chat                |
-+-----------------------------------+
-| - _id: String                     |
-| - chatName: String                |
-| - isGroupChat: Boolean            |
-| - admin: User._id                 |
-| - users: Array<User>              |
-| - latestMessage: Message          |
-+-----------------------------------+
-| + Chat(_id, chatName, isGroupChat,|
-|   admin, users, latestMessage)    |
-+-----------------------------------+
 
-+-----------------------------------+
-|             Message               |
-+-----------------------------------+
-| - _id: String                     |
-| - sender: User                    |
-| - Chat: Chat._id                  |
-| - content: String                 |
-+-----------------------------------+
-| + Message(_id, sender, Chat,      |
-|   content)                        |
-+-----------------------------------+
+### User Class
+- **_id**: `String`
+- **name**: `String`
+- **email**: `String`
+- **password(hashed)**: `String`
+- **picture**: `Image`
+
+### Chat Class
+- **_id**: `String`
+- **chatName**: `String`
+- **isGroupChat**: `Boolean`
+- **admin**: `User._id`
+- **users**: `Array<User>`
+- **latestMessage**: `Message`
+
+### Message Class
+- **_id**: `String`
+- **sender**: `User`
+- **Chat**: `Chat._id`
+- **content**: `String`
+
 
